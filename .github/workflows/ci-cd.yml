@@ -18,7 +18,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        service: [user-service, account-service, payment-gateway-service]  # Add all your service names here
+        service: [user-service, account-service, payment-gateway-service]  # List all your service names here
     steps:
       - uses: actions/checkout@v2
 
@@ -29,7 +29,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Build with Maven
-        run: mvn clean package -f ${{ matrix.service }}/pom.xml
+        run: mvn clean package -f ./${{ matrix.service }}/pom.xml
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
