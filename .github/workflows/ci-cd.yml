@@ -32,9 +32,9 @@ jobs:
           distribution: 'adopt'
 
       - name: Build parent POM
-        run: mvn clean install -f ./pom.xml
+        run: mvn clean install -f ./payment-gateway-services/pom.xml
 
-      - name: Build with Maven
+      - name: Build and package service
         run: mvn clean package -f ./payment-gateway-services/${{ matrix.service }}/pom.xml
 
       - name: Set up Docker Buildx
