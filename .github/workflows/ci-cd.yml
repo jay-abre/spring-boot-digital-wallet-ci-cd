@@ -18,9 +18,15 @@ jobs:
       packages: write
     strategy:
       matrix:
-        service: [account-service, user-service, payment-gateway-service]  # List all your service names here
+        service: [account-service, user-service, payment-gateway-service]
     steps:
       - uses: actions/checkout@v2
+
+      - name: Print current directory and list files
+        run: |
+          pwd
+          ls -la
+          ls -la spring-boot-digital-wallet-ci-cd
 
       - name: Set up JDK 11
         uses: actions/setup-java@v2
@@ -29,7 +35,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Build with Maven
-        run: mvn clean package -f ./${{ matrix.service }}/pom.xml
+        run: mvn clean package -f spring-boot-digital-wallet-ci-cd/${{ matrix.service }}/pom.xml
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -44,10 +50,11 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: ./spring-boot-digital-wallet-ci-cd/${{ matrix.service }}
-          file: ./spring-boot-digital-wallet-ci-cd/${{ matrix.service }}/Dockerfile
+          context: spring-boot-digital-wallet-ci-cd/${{ matrix.service }}
+          file: spring-boot-digital-wallet-ci-cd/${{ matrix.service }}/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
