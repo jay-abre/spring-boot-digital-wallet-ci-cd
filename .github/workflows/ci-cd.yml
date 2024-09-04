@@ -76,7 +76,8 @@ jobs:
 
       - name: Deploy to local Kubernetes
         run: |
-          echo "Deploying ${matrix.service} to Kubernetes"
+          echo "Deploying ${{ matrix.service }} to Kubernetes"
           kubectl apply -f payment-gateway-services/${{ matrix.service }}/kubernetes/deployment.yml
           kubectl apply -f payment-gateway-services/${{ matrix.service }}/kubernetes/service.yml
-          kubectl set image deployment/${{ matrix.service }} ${matrix.service}=${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}
+          kubectl set image deployment/${{ matrix.service }} ${{ matrix.service }}=${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}
+
