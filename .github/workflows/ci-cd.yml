@@ -65,6 +65,6 @@ jobs:
 
       - name: Deploy to local Kubernetes
         run: |
-          kubectl apply -f ${{ matrix.service }}/kubernetes/deployment.yaml
-          kubectl apply -f ${{ matrix.service }}/kubernetes/service.yaml
+          kubectl apply -f ${{ matrix.service }}/kubernetes/deployment.yml
+          kubectl apply -f ${{ matrix.service }}/kubernetes/service.yml
           kubectl set image deployment/${{ matrix.service }} ${{ matrix.service }}=${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}
