@@ -18,7 +18,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        service: [user-service]
+        service: [user-service]  # Add more services if needed
     steps:
       - uses: actions/checkout@v2
 
@@ -57,6 +57,12 @@ jobs:
           platforms: linux/amd64,linux/arm64
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Check Kubernetes YAML Files
+        run: |
+          ls -l payment-gateway-services/${{ matrix.service }}/kubernetes/
+          cat payment-gateway-services/${{ matrix.service }}/kubernetes/deployment.yml
+          cat payment-gateway-services/${{ matrix.service }}/kubernetes/service.yml
 
       - name: Verify Kubernetes deployments
         run: |
