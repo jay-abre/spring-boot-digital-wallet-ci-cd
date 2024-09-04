@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-service  # Replace with your service name
+  name: user-service
   labels:
-    app: user-service  # Replace with your service name
+    app: user-service
 spec:
   type: ClusterIP  # or LoadBalancer, or NodePort depending on your needs
   ports:
     - port: 80  # The port the service is exposed on
       targetPort: 8081  # The port your application is running on in the container
   selector:
-    app: user-service  # This should match the labels in your deployment
+    app: user-service

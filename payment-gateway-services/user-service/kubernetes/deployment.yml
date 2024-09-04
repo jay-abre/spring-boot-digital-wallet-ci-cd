@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-service  # This should match the matrix service name
+  name: user-service
 spec:
   replicas: 1
   selector:
@@ -13,8 +13,8 @@ spec:
         app: user-service
     spec:
       containers:
-        - name: user-service  # This should also match the matrix service name
-          image: ghcr.io/yourusername/your-repo-user-service:latest  # This will be updated by kubectl set image
+        - name: user-service
+          image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-user-service:latest
           ports:
             - containerPort: 8081
       imagePullSecrets:
