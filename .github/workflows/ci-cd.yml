@@ -18,7 +18,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        service: [user-service]  # Add more services if needed
+        service: [user-service]
     steps:
       - uses: actions/checkout@v2
 
@@ -58,20 +58,24 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Check Kubernetes YAML Files
-        run: |
-          ls -l payment-gateway-services/${{ matrix.service }}/kubernetes/
-          cat payment-gateway-services/${{ matrix.service }}/kubernetes/deployment.yml
-          cat payment-gateway-services/${{ matrix.service }}/kubernetes/service.yml
-
       - name: Verify Kubernetes deployments
         run: |
           kubectl get deployments
           kubectl get services
 
+      - name: Print Environment Variables
+        run: |
+          echo "Matrix Service: ${{ matrix.service }}"
+          echo "Registry: ${{ env.REGISTRY }}"
+          echo "Base Image Name: ${{ env.BASE_IMAGE_NAME }}"
+          echo "GitHub SHA: ${{ github.sha }}"
+
+      - name: Echo Kubectl Command
+        run: |
+          echo "kubectl set image deployment/${{ matrix.service }} ${matrix.service}=${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}"
+
       - name: Deploy to local Kubernetes
         run: |
-          echo "Deploying ${matrix.service} to Kubernetes"
           kubectl apply -f payment-gateway-services/${{ matrix.service }}/kubernetes/deployment.yml
           kubectl apply -f payment-gateway-services/${{ matrix.service }}/kubernetes/service.yml
           kubectl set image deployment/${{ matrix.service }} ${matrix.service}=${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}
