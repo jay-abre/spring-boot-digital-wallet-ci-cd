@@ -58,6 +58,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Verify Kubernetes deployments
+        run: |
+          kubectl get deployments
+          kubectl get services
+
       - name: Deploy to local Kubernetes
         run: |
           echo "Deploying ${matrix.service} to Kubernetes"
