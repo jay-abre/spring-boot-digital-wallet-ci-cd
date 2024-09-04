@@ -11,7 +11,7 @@ env:
   BASE_IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: self-hosted
     permissions:
       contents: read
@@ -58,8 +58,12 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  deploy:
+    runs-on: self-hosted
+    needs: build-and-push
+    steps:
       - name: Deploy to local Kubernetes
         run: |
-          kubectl apply -f ${{ matrix.service }}/kubernetes/deployment.yml
-          kubectl apply -f ${{ matrix.service }}/kubernetes/service.yml
+          kubectl apply -f ${{ matrix.service }}/kubernetes/deployment.yaml
+          kubectl apply -f ${{ matrix.service }}/kubernetes/service.yaml
           kubectl set image deployment/${{ matrix.service }} ${{ matrix.service }}=${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}
