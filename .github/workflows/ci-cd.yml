@@ -58,9 +58,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Change to service directory
-        run: cd payment-gateway-services/${{ matrix.service }}/kubernetes
-        
       - name: Deploy to local Kubernetes
         run: |
           echo "Deploying ${matrix.service} to Kubernetes"
