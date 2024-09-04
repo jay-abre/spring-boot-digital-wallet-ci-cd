@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account-service  # This should match the matrix service name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account-service
+  template:
+    metadata:
+      labels:
+        app: account-service
+    spec:
+      containers:
+        - name: account-service  # This should also match the matrix service name
+          image: ghcr.io/yourusername/your-repo-account-service:latest  # This will be updated by kubectl set image
+          ports:
+            - containerPort: 8082
+      imagePullSecrets:
+        - name: github-registry

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-gateway-service  # Replace with your service name
+  labels:
+    app: payment-gateway-service  # Replace with your service name
+spec:
+  type: ClusterIP  # or LoadBalancer, or NodePort depending on your needs
+  ports:
+    - port: 80  # The port the service is exposed on
+      targetPort: 8083  # The port your application is running on in the container
+  selector:
+    app: payment-gateway-service  # This should match the labels in your deployment
