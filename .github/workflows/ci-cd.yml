@@ -11,19 +11,16 @@ env:
   BASE_IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: self-hosted
     permissions:
       contents: read
       packages: write
     strategy:
       matrix:
-        service: [user-service,account-service,payment-gateway-service]
+        service: [user-service, account-service, payment-gateway-service]
     steps:
       - uses: actions/checkout@v2
-
-      - name: List files
-        run: ls -R
 
       - name: Set up JDK 17
         uses: actions/setup-java@v2
@@ -58,6 +55,20 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  deploy:
+    runs-on: self-hosted
+    needs: build
+    strategy:
+      matrix:
+        service: [user-service, account-service, payment-gateway-service]
+    steps:
+      - name: Deploy to local Kubernetes
+        run: |
+          echo "Deploying ${{ matrix.service }} to Kubernetes"
+          kubectl apply -f payment-gateway-services/${{ matrix.service }}/kubernetes/deployment.yml
+          kubectl apply -f payment-gateway-services/${{ matrix.service }}/kubernetes/service.yml
+          kubectl set image deployment/${{ matrix.service }} ${{ matrix.service }}=${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}
+
       - name: Verify Kubernetes deployments
         run: |
           kubectl get deployments
@@ -73,11 +84,3 @@ jobs:
       - name: Echo Kubectl Command
         run: |
           echo "kubectl set image deployment/${{ matrix.service }} ${matrix.service}=${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}"
-
-      - name: Deploy to local Kubernetes
-        run: |
-          echo "Deploying ${{ matrix.service }} to Kubernetes"
-          kubectl apply -f payment-gateway-services/${{ matrix.service }}/kubernetes/deployment.yml
-          kubectl apply -f payment-gateway-services/${{ matrix.service }}/kubernetes/service.yml
-          kubectl set image deployment/${{ matrix.service }} ${{ matrix.service }}=${{ env.REGISTRY }}/${{ env.BASE_IMAGE_NAME }}-${{ matrix.service }}:${{ github.sha }}
-
