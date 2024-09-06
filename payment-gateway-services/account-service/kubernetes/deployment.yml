@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: account-service  # This should also match the matrix service name
-          image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-user-service:latest
+          image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-account-service:latest
           ports:
             - containerPort: 8082
       imagePullSecrets:
