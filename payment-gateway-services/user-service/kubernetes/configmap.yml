@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: user-service-config
+  namespace: default
+data:
+  spring.datasource.url: "jdbc:postgresql://localhost:5432/user_service_db"
+  spring.datasource.username: "user_service_user"

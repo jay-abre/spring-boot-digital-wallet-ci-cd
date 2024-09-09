@@ -17,5 +17,44 @@ spec:
           image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-payment-gateway-service:latest
           ports:
             - containerPort: 8083
+          env:
+            # Environment variables sourced from ConfigMap
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-gateway-service-config
+                  key: spring.datasource.url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-gateway-service-config
+                  key: spring.datasource.username
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-gateway-service-config
+                  key: spring.kafka.bootstrap-servers
+            - name: SPRING_KAFKA_CONSUMER_GROUP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-gateway-service-config
+                  key: spring.kafka.consumer.group-id
+
+            # Environment variables sourced from Secret
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: payment-gateway-service-secrets
+                  key: spring.datasource.password
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: payment-gateway-service-secrets
+                  key: jwt.secret
+            - name: STRIPE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: payment-gateway-service-secrets
+                  key: stripe.api.key
       imagePullSecrets:
         - name: github-registry

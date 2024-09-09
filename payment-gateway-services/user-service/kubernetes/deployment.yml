@@ -17,5 +17,64 @@ spec:
           image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-user-service:latest
           ports:
             - containerPort: 8081
+          env:
+            # Environment variables sourced from ConfigMap
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: spring.datasource.url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: spring.datasource.username
+
+            # Environment variables sourced from Secret
+            - name: STRIPE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: stripe.api.key
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: jwt.secret
+            - name: SUPER_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: super-admin.username
+            - name: SUPER_ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: super-admin.email
+            - name: SUPER_ADMIN_FIRST_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: super-admin.first-name
+            - name: SUPER_ADMIN_MIDDLE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: super-admin.middle-name
+            - name: SUPER_ADMIN_LAST_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: super-admin.last-name
+            - name: SUPER_ADMIN_MOBILE_NUMBER
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: super-admin.mobile-number
+            - name: SUPER_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: super-admin.password
       imagePullSecrets:
         - name: github-registry

@@ -16,6 +16,40 @@ spec:
         - name: account-service  # This should also match the matrix service name
           image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-account-service:latest
           ports:
-            - containerPort: 8082
+            - containerPort: 8085  # Updated to reflect the port from application.yml (8085)
+          env:
+            # Environment variables sourced from ConfigMap
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: account-service-config
+                  key: spring.datasource.url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: account-service-config
+                  key: spring.datasource.username
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: account-service-config
+                  key: spring.kafka.bootstrap-servers
+            - name: SPRING_KAFKA_CONSUMER_GROUP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: account-service-config
+                  key: spring.kafka.consumer.group-id
+
+            # Environment variables sourced from Secret
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: account-service-secrets
+                  key: spring.datasource.password
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: account-service-secrets
+                  key: jwt.secret
       imagePullSecrets:
         - name: github-registry
