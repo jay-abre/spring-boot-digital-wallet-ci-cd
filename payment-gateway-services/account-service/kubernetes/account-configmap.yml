@@ -4,7 +4,7 @@ metadata:
   name: account-service-config
   namespace: default
 data:
-  spring.datasource.url: "jdbc:postgresql://postgres:5432/payment_gateway"
+  spring.datasource.url: "jdbc:postgresql://postgres:5432/account_service"
   spring.datasource.username: "postgres"
   spring.kafka.bootstrap-servers: "kafka:9092"
   spring.kafka.consumer.group-id: "account-service"
