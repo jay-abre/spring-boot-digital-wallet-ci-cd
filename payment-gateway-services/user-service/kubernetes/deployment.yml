@@ -29,8 +29,46 @@ spec:
                 configMapKeyRef:
                   name: user-service-config
                   key: spring.datasource.username
-
-            # Environment variables sourced from Secret
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: user-service-secrets
+                  key: spring.datasource.password
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: spring.jpa.hibernate.ddl-auto
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: spring.jpa.properties.hibernate.dialect
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_TEMP_USE_JDBC_METADATA_DEFAULTS
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: spring.jpa.properties.hibernate.temp.use_jdbc_metadata_defaults
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: spring.kafka.bootstrap-servers
+            - name: SPRING_SERVLET_MULTIPART_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: spring.servlet.multipart.enabled
+            - name: SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: spring.servlet.multipart.max-file-size
+            - name: SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: spring.servlet.multipart.max-request-size
             - name: STRIPE_API_KEY
               valueFrom:
                 secretKeyRef:
