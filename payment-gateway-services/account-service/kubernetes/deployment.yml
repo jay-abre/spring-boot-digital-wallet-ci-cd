@@ -54,7 +54,7 @@ spec:
                 configMapKeyRef:
                   name: account-service-config
                   key: spring.jpa.properties.hibernate.dialect
-            - name: LOGGING_LEVEL
+            - name: LOGGING_LEVEL_COM_ELECTRIC_TITANS_ACCOUNTSERVICE  # Updated
               valueFrom:
                 configMapKeyRef:
                   name: account-service-config
