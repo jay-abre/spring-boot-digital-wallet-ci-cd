@@ -31,7 +31,7 @@ spec:
                   name: postgres-secrets
                   key: postgres.password
             - name: POSTGRES_DB
-              value: payment-gateway-service
+              value: payment_gateway
           volumeMounts:
             - name: postgres-storage
               mountPath: /var/lib/postgresql/data
