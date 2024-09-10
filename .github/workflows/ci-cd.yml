@@ -71,6 +71,12 @@ jobs:
           kubectl apply -f payment-gateway-services/common-kubernetes/postgres-deployment.yml
           kubectl apply -f payment-gateway-services/common-kubernetes/postgres-service.yml
 
+      - name: Apply secrets for the microservice
+        run: |
+          echo "Applying secrets for ${{ matrix.service }}"
+          kubectl apply -f payment-gateway-services/${{ matrix.service }}/kubernetes/secret.yml
+
+
       - name: Deploy microservices to Kubernetes
         run: |
           echo "Deploying ${{ matrix.service }} to Kubernetes"
