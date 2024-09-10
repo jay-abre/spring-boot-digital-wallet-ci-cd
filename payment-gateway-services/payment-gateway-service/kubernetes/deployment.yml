@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: payment-gateway-service  # This should match the matrix service name
+  name: payment-gateway-service
 spec:
   replicas: 1
   selector:
@@ -13,48 +13,68 @@ spec:
         app: payment-gateway-service
     spec:
       containers:
-        - name: payment-gateway-service  # This should also match the matrix service name
+        - name: payment-gateway-service
           image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-payment-gateway-service:latest
           ports:
             - containerPort: 8083
           env:
             # Environment variables sourced from ConfigMap
+            - name: SERVER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-gateway-config
+                  key: server.port
+            - name: SPRING_APPLICATION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-gateway-config
+                  key: spring.application.name
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 configMapKeyRef:
-                  name: payment-gateway-service-config
+                  name: payment-gateway-config
                   key: spring.datasource.url
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 configMapKeyRef:
-                  name: payment-gateway-service-config
+                  name: payment-gateway-config
                   key: spring.datasource.username
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-gateway-config
+                  key: spring.jpa.hibernate.ddl-auto
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-gateway-config
+                  key: spring.jpa.properties.hibernate.dialect
             - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
               valueFrom:
                 configMapKeyRef:
-                  name: payment-gateway-service-config
+                  name: payment-gateway-config
                   key: spring.kafka.bootstrap-servers
             - name: SPRING_KAFKA_CONSUMER_GROUP_ID
               valueFrom:
                 configMapKeyRef:
-                  name: payment-gateway-service-config
+                  name: payment-gateway-config
                   key: spring.kafka.consumer.group-id
 
             # Environment variables sourced from Secret
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: payment-gateway-service-secrets
+                  name: payment-gateway-secrets
                   key: spring.datasource.password
             - name: JWT_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: payment-gateway-service-secrets
+                  name: payment-gateway-secrets
                   key: jwt.secret
             - name: STRIPE_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: payment-gateway-service-secrets
+                  name: payment-gateway-secrets
                   key: stripe.api.key
       imagePullSecrets:
         - name: github-registry

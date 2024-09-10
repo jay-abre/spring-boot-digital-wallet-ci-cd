@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: account-service  # This should match the matrix service name
+  name: account-service
 spec:
   replicas: 1
   selector:
@@ -13,12 +13,17 @@ spec:
         app: account-service
     spec:
       containers:
-        - name: account-service  # This should also match the matrix service name
+        - name: account-service
           image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-account-service:latest
           ports:
-            - containerPort: 8085  # Updated to reflect the port from application.yml (8085)
+            - containerPort: 8085
           env:
             # Environment variables sourced from ConfigMap
+            - name: SPRING_APPLICATION_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: account-service-config
+                  key: spring.application.name
             - name: SPRING_DATASOURCE_URL
               valueFrom:
                 configMapKeyRef:
@@ -39,6 +44,21 @@ spec:
                 configMapKeyRef:
                   name: account-service-config
                   key: spring.kafka.consumer.group-id
+            - name: SPRING_JPA_HIBERNATE_DDL_AUTO
+              valueFrom:
+                configMapKeyRef:
+                  name: account-service-config
+                  key: spring.jpa.hibernate.ddl-auto
+            - name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT
+              valueFrom:
+                configMapKeyRef:
+                  name: account-service-config
+                  key: spring.jpa.properties.hibernate.dialect
+            - name: LOGGING_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: account-service-config
+                  key: logging.level.com.electric_titans.accountservice
 
             # Environment variables sourced from Secret
             - name: SPRING_DATASOURCE_PASSWORD
