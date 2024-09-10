@@ -5,4 +5,4 @@ metadata:
   namespace: default
 data:
   spring.datasource.url: "jdbc:postgresql://localhost:5432/payment_gateway"
-  spring.datasource.username: "user_service_user"
+  spring.datasource.username: "postgres"
