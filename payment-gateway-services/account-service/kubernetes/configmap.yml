@@ -12,3 +12,4 @@ data:
   spring.kafka.bootstrap-servers: "kafka:9092"
   spring.kafka.consumer.group-id: "account-service"
   logging.level.com.electric_titans.accountservice: "DEBUG"
+  jwt.expiration-time: "3600000"

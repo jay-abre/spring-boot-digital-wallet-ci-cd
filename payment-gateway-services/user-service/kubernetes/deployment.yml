@@ -79,6 +79,11 @@ spec:
                 secretKeyRef:
                   name: user-service-secrets
                   key: jwt.secret
+            - name: JWT_EXPIRATION_TIME
+              valueFrom:
+                configMapKeyRef:
+                  name: user-service-config
+                  key: jwt.expiration-time
             - name: SUPER_ADMIN_USERNAME
               valueFrom:
                 secretKeyRef:

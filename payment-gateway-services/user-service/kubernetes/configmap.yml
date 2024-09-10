@@ -19,5 +19,6 @@ data:
   spring.servlet.multipart.enabled: "true"
   spring.servlet.multipart.max-file-size: "10MB"
   spring.servlet.multipart.max-request-size: "10MB"
+  jwt.expiration-time: "3600000"
 
   stripe.api.key: "sk_test_51PYgn7RvpDLCTJ2LrFNta4dQLcPYUWLiXRE5LB81MeT3KJ1QjksQ0VzydPUtiU5vsgRGujRfUVyTsN0YHdPovpz900rVtVCzsh"

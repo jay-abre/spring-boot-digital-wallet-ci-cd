@@ -71,6 +71,11 @@ spec:
                 secretKeyRef:
                   name: payment-gateway-secrets
                   key: jwt.secret
+            - name: JWT_EXPIRATION_TIME
+              valueFrom:
+                configMapKeyRef:
+                  name: payment-gateway-config
+                  key: jwt.expiration-time
             - name: STRIPE_API_KEY
               valueFrom:
                 secretKeyRef:

@@ -71,5 +71,10 @@ spec:
                 secretKeyRef:
                   name: account-service-secrets
                   key: jwt.secret
+            - name: JWT_EXPIRATION_TIME
+              valueFrom:
+                configMapKeyRef:
+                  name: account-service-config
+                  key: jwt.expiration-time
       imagePullSecrets:
         - name: github-registry
