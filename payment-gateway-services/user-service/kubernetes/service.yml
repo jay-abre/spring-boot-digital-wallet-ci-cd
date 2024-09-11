@@ -8,7 +8,7 @@ spec:
   type: NodePort  # Expose the service on a NodePort
   ports:
     - port: 80         # The port the service is exposed on
-      targetPort: 8081 # The port your application is running on in the container
+      targetPort: 8080 # The port your application is running on in the container
       nodePort: 30007  # Choose a port in the range 30000-32767
   selector:
     app: user-service
