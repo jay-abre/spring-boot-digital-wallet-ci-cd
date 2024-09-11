@@ -16,7 +16,7 @@ spec:
         - name: payment-gateway-service
           image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-payment-gateway-service:latest
           ports:
-            - containerPort: 8083
+            - containerPort: 8082
           env:
             # Environment variables sourced from ConfigMap
             - name: SERVER_PORT

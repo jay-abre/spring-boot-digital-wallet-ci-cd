@@ -16,7 +16,7 @@ spec:
         - name: user-service
           image: ghcr.io/jay-abre/spring-boot-digital-wallet-ci-cd-user-service:latest
           ports:
-            - containerPort: 8081
+            - containerPort: 8080
           env:
             # Environment variables sourced from ConfigMap
             - name: SPRING_DATASOURCE_URL

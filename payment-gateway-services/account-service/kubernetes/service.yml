@@ -1,13 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: account-service  # Replace with your service name
+  name: account-service
   labels:
-    app: account-service  # Replace with your service name
+    app: account-service
 spec:
-  type: ClusterIP  # or LoadBalancer, or NodePort depending on your needs
+  type: NodePort  # Change to NodePort
   ports:
-    - port: 80  # The port the service is exposed on
-      targetPort: 8082  # The port your application is running on in the container
+    - port: 80          # The port the service is exposed on
+      targetPort: 8081  # The port your application is running on in the container
+      nodePort: 30001   # The external port on the nodes (choose a port in the range 30000-32767)
   selector:
-    app: account-service  # This should match the labels in your deployment
+    app: account-service

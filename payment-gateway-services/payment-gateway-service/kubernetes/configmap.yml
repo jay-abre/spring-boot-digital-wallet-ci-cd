@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: payment-gateway-config
 data:
-  server.port: "8083"
+  server.port: "8082"
   spring.application.name: "payment-gateway-service"
   spring.datasource.url: "jdbc:postgresql://postgres:5432/payment_gateway"
   spring.datasource.username: "postgres"
