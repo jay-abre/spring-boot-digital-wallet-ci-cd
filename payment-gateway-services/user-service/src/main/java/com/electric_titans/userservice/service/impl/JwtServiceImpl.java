@@ -40,6 +40,13 @@ public class JwtServiceImpl implements JwtService {
             log.warn("Claims resolver is null");
             return null;
         }
+
+        // Add this block to check the token structure
+        if (token == null || !token.contains(".")) {
+            log.error("Invalid token structure: {}", token);
+            throw new IllegalArgumentException("Invalid token structure");
+        }
+
         try {
             final Claims claims = extractAllClaims(token);
             return claimsResolver.apply(claims);
