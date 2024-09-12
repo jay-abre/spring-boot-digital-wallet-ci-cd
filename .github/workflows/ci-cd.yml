@@ -60,7 +60,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        service: [user-service, account-service, payment-gateway-service]
+        service: [user-service, account-service]
     steps:
       - name: Deploy PostgreSQL to Kubernetes
         run: |

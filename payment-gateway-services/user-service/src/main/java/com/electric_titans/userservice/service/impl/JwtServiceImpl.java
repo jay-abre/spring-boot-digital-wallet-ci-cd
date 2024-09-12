@@ -68,8 +68,8 @@ public class JwtServiceImpl implements JwtService {
             CustomUserDetails userDetails,
             long expiration
     ) {
-        log.debug("buildToken({}, {}, {})", extraClaims.size(), userDetails.getEmail(), expiration);
-        return Jwts
+        log.debug("Building token for user: {}", userDetails.getEmail());
+        String token = Jwts
                 .builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getEmail())
@@ -77,7 +77,10 @@ public class JwtServiceImpl implements JwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
+        log.debug("Generated token: {}", token);
+        return token;
     }
+
 
     @Override
     public boolean isTokenValid(String token, CustomUserDetails userDetails) {
@@ -112,7 +115,9 @@ public class JwtServiceImpl implements JwtService {
     public String extractTokenFromRequest(HttpServletRequest request) {
         String authorizationHeader = request.getHeader("Authorization");
         if (StringUtils.hasText(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
-            return authorizationHeader.substring(7);
+            String token = authorizationHeader.substring(7);
+            log.debug("Extracted Token from header: {}", token);
+            return token;
         }
         return null;
     }
