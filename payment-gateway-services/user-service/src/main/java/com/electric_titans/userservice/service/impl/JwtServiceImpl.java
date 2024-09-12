@@ -134,10 +134,13 @@ public class JwtServiceImpl implements JwtService {
     private Key getSignInKey() {
         try {
             byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+            if (keyBytes.length != 32) {
+                throw new IllegalArgumentException("Invalid secret key length. Expected 32 bytes.");
+            }
             return Keys.hmacShaKeyFor(keyBytes);
         } catch (Exception e) {
             log.error("Error decoding secret key: {}", e.getMessage(), e);
-            throw e;
+            throw new IllegalArgumentException("Invalid secret key", e);
         }
     }
 
