@@ -16,7 +16,7 @@ import com.electric_titans.common.event.PaymentSuccessEvent;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.kafka.annotation.KafkaListener;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -119,7 +119,7 @@ public class AccountServiceImpl implements AccountService {
         return accountStatusUpdateResponse;
     }
 
-    @KafkaListener(topics = "DEPOSIT-SUCCESS", groupId = "${spring.kafka.consumer.group-id}")
+
     public void handleDepositSuccessEvent(PaymentSuccessEvent paymentSuccessEvent) {
         Account account = accountRepository.findById(paymentSuccessEvent.getFromAccountId())
                 .orElseThrow(() -> new ResourceNotFoundException("Account", "id", paymentSuccessEvent.getFromAccountId().toString()));
@@ -131,7 +131,7 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
-    @KafkaListener(topics = "WITHDRAW-SUCCESS", groupId = "${spring.kafka.consumer.group-id}")
+
     public void handleWithdrawSuccessEvent(PaymentSuccessEvent paymentSuccessEvent) {
         Account account = accountRepository.findById(paymentSuccessEvent.getFromAccountId())
                 .orElseThrow(() -> new ResourceNotFoundException("Account", "id", paymentSuccessEvent.getFromAccountId().toString()));
@@ -143,7 +143,7 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
-    @KafkaListener(topics = "TRANSFER-SUCCESS", groupId = "${spring.kafka.consumer.group-id}")
+
     public void handleTransferSuccessEvent(PaymentSuccessEvent paymentSuccessEvent) {
 
         log.info("From Account Id: {}", paymentSuccessEvent.getFromAccountId());

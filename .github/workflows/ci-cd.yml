@@ -18,7 +18,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        service: [user-service, account-service, payment-gateway-service]
+        service: [user-service, account-service]
     steps:
       - uses: actions/checkout@v2
 

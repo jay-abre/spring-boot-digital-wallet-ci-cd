@@ -48,7 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final TokenBlacklistService tokenBlacklistService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+
 
     @Value("${stripe.api.key}")
     private String stripeApiKey;
@@ -90,7 +90,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .email(savedUser.getEmail())
                 .build();
 
-        kafkaTemplate.send("USER-CREATED", userCreatedEvent);
+
         log.info("User registered with email: {}", savedUser.getEmail());
         return UserMapper.INSTANCE.userToUserResponse(savedUser);
     }
