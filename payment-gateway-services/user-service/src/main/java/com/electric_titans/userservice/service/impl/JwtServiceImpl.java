@@ -18,7 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
 @Slf4j
 @Service
 public class JwtServiceImpl implements JwtService {
@@ -31,7 +30,7 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String extractUsername(String token) {
-        log.debug("extractUsername({})", token);
+        log.debug("Extracting username from token: {}", token);
         return extractClaim(token, Claims::getSubject);
     }
 
@@ -41,25 +40,30 @@ public class JwtServiceImpl implements JwtService {
             log.warn("Claims resolver is null");
             return null;
         }
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        try {
+            final Claims claims = extractAllClaims(token);
+            return claimsResolver.apply(claims);
+        } catch (Exception e) {
+            log.error("Error extracting claims: {}", e.getMessage(), e);
+            return null;
+        }
     }
 
     @Override
     public String generateToken(CustomUserDetails userDetails) {
-        log.debug("generateToken({})", userDetails.getEmail());
+        log.debug("Generating token for user: {}", userDetails.getEmail());
         return generateToken(new HashMap<>(), userDetails);
     }
 
     @Override
     public String generateToken(Map<String, Object> extraClaims, CustomUserDetails userDetails) {
-        log.debug("generateToken({}, {})", extraClaims.size(), userDetails.getUsername());
+        log.debug("Generating token with extra claims: {} for user: {}", extraClaims, userDetails.getUsername());
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
     @Override
     public long getExpirationTime() {
-        log.debug("getExpirationTime()");
+        log.debug("Getting expiration time: {}", jwtExpiration);
         return jwtExpiration;
     }
 
@@ -69,28 +73,37 @@ public class JwtServiceImpl implements JwtService {
             long expiration
     ) {
         log.debug("Building token for user: {}", userDetails.getEmail());
-        String token = Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getEmail())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
-        log.debug("Generated token: {}", token);
-        return token;
+        try {
+            String token = Jwts
+                    .builder()
+                    .setClaims(extraClaims)
+                    .setSubject(userDetails.getEmail())
+                    .setIssuedAt(new Date())
+                    .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                    .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+                    .compact();
+            log.debug("Generated token: {}", token);
+            return token;
+        } catch (Exception e) {
+            log.error("Error building token: {}", e.getMessage(), e);
+            throw e;
+        }
     }
-
 
     @Override
     public boolean isTokenValid(String token, CustomUserDetails userDetails) {
         final String username = extractUsername(token);
-        log.info("Username: {}", username);
+        log.info("Token username: {}", username);
         return (username.equals(userDetails.getEmail())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        try {
+            return extractExpiration(token).before(new Date());
+        } catch (Exception e) {
+            log.error("Error checking token expiration: {}", e.getMessage(), e);
+            return true;
+        }
     }
 
     private Date extractExpiration(String token) {
@@ -98,17 +111,27 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        try {
+            return Jwts
+                    .parserBuilder()
+                    .setSigningKey(getSignInKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (Exception e) {
+            log.error("Error extracting claims from token: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+        try {
+            byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+            return Keys.hmacShaKeyFor(keyBytes);
+        } catch (Exception e) {
+            log.error("Error decoding secret key: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     @Override
