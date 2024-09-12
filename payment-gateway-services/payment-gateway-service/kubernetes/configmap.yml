@@ -9,7 +9,7 @@ data:
   spring.datasource.username: "postgres"
   spring.jpa.hibernate.ddl-auto: "update"
   spring.jpa.properties.hibernate.dialect: "org.hibernate.dialect.PostgreSQLDialect"
-  spring.kafka.bootstrap-servers: "kafka:9092"
+  spring.kafka.bootstrap-servers: "192.168.65.3:31286"
   spring.kafka.consumer.group-id: "payment-gateway-service"
   stripe.api.key: "sk_test_51PYgn7RvpDLCTJ2LrFNta4dQLcPYUWLiXRE5LB81MeT3KJ1QjksQ0VzydPUtiU5vsgRGujRfUVyTsN0YHdPovpz900rVtVCzsh"
   jwt.expiration-time: "3600000"
