@@ -70,7 +70,9 @@ jobs:
           kubectl apply -f payment-gateway-services/common-kubernetes/postgres-secrets.yml
           kubectl apply -f payment-gateway-services/common-kubernetes/postgres-deployment.yml
           kubectl apply -f payment-gateway-services/common-kubernetes/postgres-service.yml
-          
+          kubectl apply -f payment-gateway-services/common-kubernetes/grafana-secret.yml
+          kubectl apply -f payment-gateway-services/common-kubernetes/monitoring-logging-config.yml
+
       - name: Apply ConfigMap for the microservice
         run: |
           echo "Applying ConfigMap for ${{ matrix.service }}"
