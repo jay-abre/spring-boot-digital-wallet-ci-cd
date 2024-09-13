@@ -22,9 +22,7 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl implements JwtService {
 
-    @Value("${jwt.secret}")
-    private String secretKey;
-
+    private final String secretKey = "ctg8mN+IeaDnxyso2lt8Mba2YIsahcyiuVDAuUH20RI=";
     @Value("${jwt.expiration-time}")
     private long jwtExpiration;
 
